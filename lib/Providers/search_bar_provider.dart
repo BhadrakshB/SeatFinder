@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 class SearchBarHandler extends ChangeNotifier {
   String query = '';
-  double recurringElementHeight = 20;
+  double recurringElementHeight =0;
 
   Map<int, double> remainder = {
     1: 0,
@@ -40,7 +40,7 @@ class SearchBarHandler extends ChangeNotifier {
     if (query != '') {
       double offset = 0;
       log("multiple: ${int.parse(query) ~/ 8}\nremainder: ${remainder[int.parse(query) % 8]!}");
-      offset += int.parse(query) ~/ 8 + remainder[int.parse(query) % 8]!;
+      offset += (int.parse(query) ~/ 8) * recurringElementHeight + remainder[int.parse(query) % 8]!;
       log(offset.toString());
       if (scrollController.hasClients) {
         scrollController.animateTo(offset,
