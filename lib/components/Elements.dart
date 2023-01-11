@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -39,8 +42,8 @@ class Berth extends StatelessWidget {
       required this.side,
       required this.index,
       required this.isBig});
-      
-        get backgroundColor => null;
+
+  get backgroundColor => null;
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +75,10 @@ class Berth extends StatelessWidget {
                                 bool selected =
                                     (index + i).toString() == value.query;
 
-                                Text textWidget =
-                                    const Text(""); 
-                                    // Text to denote berth levels
+                                Text textWidget = const Text("");
+                                // Text to denote berth levels
                                 TextStyle textStyle = TextStyle(
-                                  // This textstyle is for berth levels..LOWER, 
+                                  // This textstyle is for berth levels..LOWER,
                                   // MIDDLE, UPPER
                                   fontSize: 8,
                                   fontWeight: FontWeight.bold,
@@ -236,8 +238,6 @@ class Berth extends StatelessWidget {
   }
 }
 
-
-
 class RecurringElement extends StatelessWidget {
   // Big Berth + Small Berth element that is repeating inside the listview
   final double height;
@@ -276,23 +276,32 @@ class RecurringElement extends StatelessWidget {
   }
 }
 
-
-class CustomSearchBar extends StatelessWidget {
+class CustomSearchBar extends StatefulWidget {
   final ScrollController scrollController;
 
-  CustomSearchBar({Key? key, required this.scrollController}) : super(key: key);
+  const CustomSearchBar({Key? key, required this.scrollController}) : super(key: key);
+
+  @override
+  State<CustomSearchBar> createState() => _CustomSearchBarState();
+}
+
+class _CustomSearchBarState extends State<CustomSearchBar> {
   double height = 50;
+
   TextEditingController textFormFieldController = TextEditingController();
+
+  FocusNode focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         SizedBox(
           height: height,
-          child: TextFormField(
+          child: TextField(
+            focusNode: focusNode,
             controller: textFormFieldController,
             textAlignVertical: TextAlignVertical.center,
-
             keyboardType: TextInputType.phone,
             onChanged: (value) {
               // Enable this setQuery function inside onChanged, ONLY
@@ -300,25 +309,39 @@ class CustomSearchBar extends StatelessWidget {
 
 //              context
 //                  .read<SearchBarHandler>()
-//                  .setQuery(value, scrollController); 
+//                  .setQuery(value, scrollController);
 
               ScaffoldMessenger.of(context).clearSnackBars();
-              context
-                  .read<SearchBarHandler>()
-                  .setEnableFind(value != '' ? true : false);
+              if (value != '') {
+                if (int.parse(value) > 72) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('There are only 72 seats per berth'),
+                    ),
+                  );
+                } else if (int.parse(value) == 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Seat Number cannot be 0'),
+                    ),
+                  );
+                }
+                context.read<SearchBarHandler>().setEnableFind(
+                    int.parse(value) > 72 || int.parse(value) == 0
+                        ? false
+                        : true);
+              } else {}
             },
-
-            onFieldSubmitted: (value) {
-              // Enable onEditingCompleted, if you want to show berth ONLY 
+            onSubmitted: (value) {
+              // Enable onSubmitted, if you want to show berth ONLY
               // when the user completes the query
-
               context
                   .read<SearchBarHandler>()
-                  .setQuery(value, scrollController);
+                  .setQuery(value, widget.scrollController);
             },
+            
             maxLines: null,
             minLines: null,
-
             expands: true,
             style: TextStyle(
               color: topTextColor,
@@ -350,7 +373,6 @@ class CustomSearchBar extends StatelessWidget {
               fillColor: backgroundColor,
               filled: true,
             ),
-            
           ),
         ),
         Align(
@@ -361,7 +383,7 @@ class CustomSearchBar extends StatelessWidget {
               return TextButton(
                 onPressed: enabled
                     ? () => context.read<SearchBarHandler>().setQuery(
-                        textFormFieldController.value.text, scrollController)
+                        textFormFieldController.value.text, widget.scrollController)
                     : () {
                         ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(

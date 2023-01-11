@@ -89,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Expanded(
               child: ListView.builder(
+                itemCount: context.read<SearchBarHandler>().numberofSeats ~/8, // Because there are 72 berth per berth
                   controller: scrollController,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
