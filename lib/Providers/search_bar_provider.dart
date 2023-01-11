@@ -4,49 +4,49 @@ import 'package:flutter/widgets.dart';
 
 class SearchBarHandler extends ChangeNotifier {
   String query = '';
-  double recurringElementHeight =0;
+  double recurringElementHeight = 0;
+  bool enableFind = false;
 
-  Map<int, double> remainder = {
-    1: 0,
-    2: 0,
-    3: 0,
-    7: 0,
-    4: 40,
-    5: 40,
-    6: 40,
-    8: 40,
-  };
+  Map<int, double> remainder = {};
 
   set setRecurringElementHeight(double height) {
-    remainder = {
-      1: 0,
-      2: 0,
-      3: 0,
-      7: 0,
-      4: height / 2,
-      5: height / 2,
-      6: height / 2,
-      0: height / 2,
-    };
     recurringElementHeight += height;
+
+    remainder = {
+      1: 50,
+      2: 50,
+      3: 50,
+      7: 50,
+      4: recurringElementHeight / 2 + 30,
+      5: recurringElementHeight / 2 + 30,
+      6: recurringElementHeight / 2 + 30,
+      0: recurringElementHeight / 2 + 30,
+    };
+  }
+
+  void setEnableFind(bool enabled) {
+    enableFind = enabled;
+    notifyListeners();
   }
 
   void setQuery(
     String text,
-    // BuildContext context,
     ScrollController scrollController,
   ) {
     query = text;
     if (query != '') {
       double offset = 0;
       log("multiple: ${int.parse(query) ~/ 8}\nremainder: ${remainder[int.parse(query) % 8]!}");
-      offset += (int.parse(query) ~/ 8) * recurringElementHeight + remainder[int.parse(query) % 8]!;
+      offset += (int.parse(query) ~/ 8) * recurringElementHeight +
+          remainder[int.parse(query) % 8]!;
       log(offset.toString());
       if (scrollController.hasClients) {
-        scrollController.animateTo(offset,
-            duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+        scrollController.animateTo(
+            [1, 2, 3, 7].contains(int.parse(query)) ? 0.0 : offset,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeInOut);
       }
     }
-    notifyListeners();
+    notifyListeners(); // enable this to indicate seat whenever text is changed
   }
 }
