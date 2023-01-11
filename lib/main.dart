@@ -88,12 +88,6 @@ class CustomSearchBar extends StatelessWidget {
       children: [
         SizedBox(
           height: height,
-          // decoration: BoxDecoration(
-          //   border: Border.all(
-          //     color: topTextColor,
-          //   ),
-          //   borderRadius: BorderRadius.circular(10),
-          // ),
           child: TextFormField(
             textAlignVertical: TextAlignVertical.center,
 
