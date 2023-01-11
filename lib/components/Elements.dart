@@ -80,7 +80,7 @@ class Berth extends StatelessWidget {
                                 TextStyle textStyle = TextStyle(
                                   // This textstyle is for berth levels..LOWER,
                                   // MIDDLE, UPPER
-                                  fontSize: 8,
+                                  fontSize: 7,
                                   fontWeight: FontWeight.bold,
                                   color: selected
                                       ? backgroundColor
@@ -88,8 +88,9 @@ class Berth extends StatelessWidget {
                                 );
                                 switch (i) {
                                   case 0:
-                                    textWidget =
-                                        Text("LOWER", style: textStyle);
+                                    textWidget = Text(
+                                        isBig ? "LOWER" : "SIDE LOWER",
+                                        style: textStyle);
                                     break;
                                   case 1:
                                     textWidget =
@@ -159,7 +160,7 @@ class Berth extends StatelessWidget {
                                     ""); // Text Widget for denoting berth levels
                                 TextStyle textStyle = TextStyle(
                                   // This textstyle is for berth levels..LOWER, MIDDLE, UPPER
-                                  fontSize: 8,
+                                  fontSize: 7,
                                   fontWeight: FontWeight.bold,
                                   color: selected
                                       ? backgroundColor
@@ -167,8 +168,9 @@ class Berth extends StatelessWidget {
                                 );
                                 switch (i) {
                                   case 0:
-                                    textWidget =
-                                        Text("LOWER", style: textStyle);
+                                    textWidget = Text(
+                                        isBig ? "LOWER" : "SIDE UPPER",
+                                        style: textStyle);
                                     break;
                                   case 1:
                                     textWidget =
@@ -279,7 +281,8 @@ class RecurringElement extends StatelessWidget {
 class CustomSearchBar extends StatefulWidget {
   final ScrollController scrollController;
 
-  const CustomSearchBar({Key? key, required this.scrollController}) : super(key: key);
+  const CustomSearchBar({Key? key, required this.scrollController})
+      : super(key: key);
 
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();
@@ -339,7 +342,6 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                   .read<SearchBarHandler>()
                   .setQuery(value, widget.scrollController);
             },
-            
             maxLines: null,
             minLines: null,
             expands: true,
@@ -383,7 +385,8 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
               return TextButton(
                 onPressed: enabled
                     ? () => context.read<SearchBarHandler>().setQuery(
-                        textFormFieldController.value.text, widget.scrollController)
+                        textFormFieldController.value.text,
+                        widget.scrollController)
                     : () {
                         ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(
