@@ -46,68 +46,74 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    
     Size size = MediaQuery.of(context).size;
+    
     double width = size.width - 225;
     double sideLength = (width - 12) / 3;
 
     double height = sideLength * 2 + 30;
 
+    context.read<SearchBarHandler>().setRecurringElementHeight = height;
+
+
     return Scaffold(
-      body: Consumer<SearchBarHandler>(
-        builder: (context, value, child) {
-          log("value from ${value.query}");
-          return Padding(
-            padding: EdgeInsets.only(
-              left: 15,
-              right: 15,
-              top: MediaQuery.of(context).viewPadding.top + 30,
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: 15,
+          right: 15,
+          top: MediaQuery.of(context).viewPadding.top + 30,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Seat Finder',
+              style: TextStyle(
+                color: topTextColor,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Seat Finder',
-                  style: TextStyle(
-                    color: topTextColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Consumer<SearchBarHandler>(
+                      builder: (context, value, child) {
+                        return CustomSearchBar(
+                            scrollController: scrollController);
+                      },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Row(
-                    children: [
-                      Expanded(child: CustomSearchBar()),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: 5,
-                      controller: scrollController,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        log("currentIndex: ${index * 8 + 1}");
-                        return RecurringElement(
-                          height: height,
-                          width: width,
-                          side: sideLength,
-                          index: index * 8 + 1,
-                        );
-                      }),
-                ),
-              ],
+                ],
+              ),
             ),
-          );
-        },
+            Expanded(
+              child: ListView.builder(
+                  controller: scrollController,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return RecurringElement(
+                      height: height,
+                      width: width,
+                      side: sideLength,
+                      index: index * 8 + 1,
+                    );
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class CustomSearchBar extends StatelessWidget {
-  CustomSearchBar({Key? key}) : super(key: key);
+  final ScrollController scrollController;
+  CustomSearchBar({Key? key, required this.scrollController}) : super(key: key);
   double height = 50;
   @override
   Widget build(BuildContext context) {
@@ -120,8 +126,9 @@ class CustomSearchBar extends StatelessWidget {
 
             keyboardType: TextInputType.phone,
             onChanged: (value) {
-              log("new value: $value");
-              context.read<SearchBarHandler>().setQuery(value);
+              context
+                  .read<SearchBarHandler>()
+                  .setQuery(value, scrollController);
             },
             maxLines: null,
             minLines: null,
@@ -171,7 +178,6 @@ class CustomSearchBar extends StatelessWidget {
           child: Consumer<SearchBarHandler>(
             builder: (context, value, child) {
               bool enabled = value.query != '';
-              log("$enabled");
               return TextButton(
                 onPressed: enabled ? () {} : () {},
                 style: TextButton.styleFrom(
@@ -258,15 +264,20 @@ class Berth extends StatelessWidget {
                               horizontal: 2,
                               vertical: 2,
                             ),
-                            child: Container(
-                              key: Key("${index + i}"),
-                              height: side,
-                              width: side,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: berthColor,
-                              ),
-                              child: Center(child: Text("${index + i}")),
+                            child: Consumer<SearchBarHandler>(
+                              builder: ((context, value, child) {
+                                bool selected =
+                                    (index + i).toString() == value.query;
+                                return Container(
+                                  height: side,
+                                  width: side,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: !selected ? berthColor : Colors.red,
+                                  ),
+                                  child: Center(child: Text("${index + i}")),
+                                );
+                              }),
                             ),
                           ),
                         );
@@ -285,15 +296,23 @@ class Berth extends StatelessWidget {
                               horizontal: 2,
                               vertical: 2,
                             ),
-                            child: Container(
-                              key: Key("${index + (isBig ? 3 : 1 )+ i}"),
-                              height: side,
-                              width: side,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: berthColor,
-                              ),
-                              child: Center(child: Text("${index +(isBig ? 3 : 1 )+ i}")),
+                            child: Consumer<SearchBarHandler>(
+                              builder: ((context, value, child) {
+                                bool selected =
+                                    (index + (isBig ? 3 : 1) + i).toString() ==
+                                        value.query;
+                                return Container(
+                                  height: side,
+                                  width: side,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: !selected ? berthColor : Colors.red,
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                          "${index + (isBig ? 3 : 1) + i}")),
+                                );
+                              }),
                             ),
                           ),
                         );
