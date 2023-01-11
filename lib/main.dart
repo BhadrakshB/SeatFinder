@@ -40,35 +40,63 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  ScrollController scrollController = ScrollController(
+    keepScrollOffset: true,
+  );
+
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    double width = size.width - 225;
+    double sideLength = (width - 12) / 3;
+
+    double height = sideLength * 2 + 30;
+
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: backgroundColor,
-        title: Text(
-          'Seat Finder',
-          style: TextStyle(
-            color: topTextColor,
-          ),
-        ),
-      ),
       body: Consumer<SearchBarHandler>(
         builder: (context, value, child) {
           log("value from ${value.query}");
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: EdgeInsets.only(
+              left: 15,
+              right: 15,
+              top: MediaQuery.of(context).viewPadding.top + 30,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 15,
+                Text(
+                  'Seat Finder',
+                  style: TextStyle(
+                    color: topTextColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                Row(
-                  children: [
-                    Expanded(child: CustomSearchBar()),
-                  ],
-                )
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Row(
+                    children: [
+                      Expanded(child: CustomSearchBar()),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: 5,
+                      controller: scrollController,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        log("currentIndex: ${index * 8 + 1}");
+                        return RecurringElement(
+                          height: height,
+                          width: width,
+                          side: sideLength,
+                          index: index * 8 + 1,
+                        );
+                      }),
+                ),
               ],
             ),
           );
@@ -83,7 +111,6 @@ class CustomSearchBar extends StatelessWidget {
   double height = 50;
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
         SizedBox(
@@ -163,6 +190,265 @@ class CustomSearchBar extends StatelessWidget {
               );
             },
           ),
+        )
+      ],
+    );
+  }
+}
+
+class HalfBorderClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.moveTo(0, size.height * (25 / 100));
+    path.lineTo(0, 0);
+    path.lineTo(size.width, 0);
+    path.lineTo(size.width, size.height * (25 / 100));
+
+    path.moveTo(size.width, size.height * (75 / 100));
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.lineTo(0, size.height * (75 / 100));
+    // path.lineTo(size.width, size.height / 2);
+    // path.lineTo(0, size.height / 2);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
+}
+
+class Berth extends StatelessWidget {
+  final double height;
+  final double width;
+  final double side;
+  final bool isBig;
+  final int index;
+  const Berth(
+      {super.key,
+      required this.height,
+      required this.width,
+      required this.side,
+      required this.index,
+      required this.isBig});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(2),
+          height: height + 10,
+          width: width + 5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(
+                      isBig ? 3 : 1,
+                      (i) {
+                        return Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 2,
+                              vertical: 2,
+                            ),
+                            child: Container(
+                              key: Key("${index + i}"),
+                              height: side,
+                              width: side,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: berthColor,
+                              ),
+                              child: Center(child: Text("${index + i}")),
+                            ),
+                          ),
+                        );
+                      },
+                    )),
+              ),
+              Expanded(
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: List.generate(
+                      isBig ? 3 : 1,
+                      (i) {
+                        return Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 2,
+                              vertical: 2,
+                            ),
+                            child: Container(
+                              key: Key("${index + (isBig ? 3 : 1 )+ i}"),
+                              height: side,
+                              width: side,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: berthColor,
+                              ),
+                              child: Center(child: Text("${index +(isBig ? 3 : 1 )+ i}")),
+                            ),
+                          ),
+                        );
+                      },
+                    )),
+              ),
+            ],
+          ),
+        ),
+        ClipPath(
+          clipper: HalfBorderClipper(),
+          child: Container(
+            height: height + 8,
+            width: width,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: topTextColor,
+                width: 6,
+                style: BorderStyle.solid,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// class SmallBerth extends StatelessWidget {
+//   final double height;
+//   final double width;
+//   final double side;
+//   const SmallBerth(
+//       {super.key,
+//       required this.height,
+//       required this.width,
+//       required this.side});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Stack(
+//       alignment: Alignment.center,
+//       children: [
+//         Container(
+//           padding: const EdgeInsets.all(2),
+//           height: height + 10,
+//           width: width + 5,
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.center,
+//             children: [
+//               Expanded(
+//                 child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.start,
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: List.generate(
+//                       1,
+//                       (index) {
+//                         return Expanded(
+//                           child: Padding(
+//                             padding: const EdgeInsets.symmetric(
+//                               horizontal: 2,
+//                               vertical: 2,
+//                             ),
+//                             child: Container(
+//                               height: side,
+//                               width: side,
+//                               decoration: BoxDecoration(
+//                                 borderRadius: BorderRadius.circular(8),
+//                                 color: berthColor,
+//                               ),
+//                             ),
+//                           ),
+//                         );
+//                       },
+//                     )),
+//               ),
+//               Expanded(
+//                 child: Row(
+//                     crossAxisAlignment: CrossAxisAlignment.end,
+//                     children: List.generate(
+//                       1,
+//                       (index) {
+//                         return Expanded(
+//                           child: Padding(
+//                             padding: const EdgeInsets.symmetric(
+//                               horizontal: 2,
+//                               vertical: 2,
+//                             ),
+//                             child: Container(
+//                               height: side,
+//                               width: side,
+//                               decoration: BoxDecoration(
+//                                 borderRadius: BorderRadius.circular(8),
+//                                 color: berthColor,
+//                               ),
+//                             ),
+//                           ),
+//                         );
+//                       },
+//                     )),
+//               ),
+//             ],
+//           ),
+//         ),
+//         ClipPath(
+//           clipper: HalfBorderClipper(),
+//           child: Container(
+//             height: height + 8,
+//             width: width,
+//             decoration: BoxDecoration(
+//               border: Border.all(
+//                 color: topTextColor,
+//                 width: 6,
+//                 style: BorderStyle.solid,
+//               ),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
+
+class RecurringElement extends StatelessWidget {
+  // Big Berth + Small Berth element that is repeating inside the listview
+  final double height;
+  final double width;
+  final double side;
+  final int index;
+  const RecurringElement({
+    super.key,
+    required this.height,
+    required this.width,
+    required this.side,
+    required this.index,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Berth(
+          height: height,
+          width: width,
+          side: side,
+          index: index,
+          isBig: true,
+        ),
+        Berth(
+          height: height,
+          width: side + 10,
+          side: side,
+          index: index + 6,
+          isBig: false,
         )
       ],
     );
