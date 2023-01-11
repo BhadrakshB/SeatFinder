@@ -10,16 +10,22 @@ These instructions will get you a copy of the project up and running on your loc
 # Installing
 1) Clone the repository:
 
- - git clone https://github.com/[username]/seat-finder.git
+```cmd
+git clone https://github.com/[username]/seat-finder.git
+```
 2) Navigate to the project directory:
-
- - cd seat-finder
+```cmd
+cd seat-finder
+```
 3) Install the dependencies:
-
- - flutter packages get
+```cmd
+flutter packages get
+```
 4) Run the application on an emulator or device:
- - flutter run
- 
+```cmd
+flutter run
+```
+
 # Functionality
  - Users can input a seat number and press the "Search" button.
 The application will then display the position of the seat and indicate the type of berth it is (e.g. upper, lower, side-upper, side-lower).
