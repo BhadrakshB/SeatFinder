@@ -34,9 +34,6 @@ The application will then display the position of the seat and indicate the type
  - Flutter - The framework used
  - Dart - The programming language used
 # Author
-Your Name - Your Github profile
+Bhadraksh Bhargava
 # Note
 This application is a prototype made as a part of the assignment given by a Recruiter and is not intented to be used in production.
-
-# License
-This project is licensed under the MIT License - see the LICENSE.md file for details.
