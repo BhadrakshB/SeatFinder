@@ -333,7 +333,9 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                     int.parse(value) > 72 || int.parse(value) == 0
                         ? false
                         : true);
-              } else {}
+              } else {
+                context.read<SearchBarHandler>().setEnableFind(false);
+              }
             },
             onSubmitted: (value) {
               // Enable onSubmitted, if you want to show berth ONLY
