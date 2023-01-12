@@ -27,8 +27,8 @@ flutter run
 ```
 
 # Functionality
- - Users can input a seat number and press the "Search" button.
-The application will then display the position of the seat and indicate the type of berth it is (e.g. upper, lower, side-upper, side-lower).
+ - Users can input a seat number and press the "Find" button.
+The application will then display the position of the seat and indicate the type of berth it is (e.g. upper, middle, lower, side-upper, side-lower).
  - If the seat number is invalid or not found, the application will display an error message.
 # Built With
  - Flutter - The framework used
