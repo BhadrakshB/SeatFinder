@@ -1,0 +1,4 @@
+#Thu Jan 12 15:52:10 IST 2023
+base.0=C\:\\DATA\\Codes\\Flutter\\seat_finder\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
