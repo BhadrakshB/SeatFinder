@@ -72,8 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'Seat Finder',
               style: TextStyle(
+                fontFamily: 'PublicaPlay',
                 color: topTextColor,
                 fontSize: 20,
+                letterSpacing: 2,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -82,15 +84,15 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: CustomSearchBar(
-                            scrollController: scrollController),
+                    child: CustomSearchBar(scrollController: scrollController),
                   ),
                 ],
               ),
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: context.read<SearchBarHandler>().numberofSeats ~/8, // Because there are 72 berth per berth
+                  itemCount: context.read<SearchBarHandler>().numberofSeats ~/
+                      8, // Because there are 72 berth per berth
                   controller: scrollController,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
@@ -108,7 +110,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-
-
-

@@ -78,6 +78,7 @@ class Berth extends StatelessWidget {
                                 Text textWidget = const Text("");
                                 // Text to denote berth levels
                                 TextStyle textStyle = TextStyle(
+                                  fontFamily: 'PublicaPlay',
                                   // This textstyle is for berth levels..LOWER,
                                   // MIDDLE, UPPER etc.
                                   fontSize: 7,
@@ -119,6 +120,7 @@ class Berth extends StatelessWidget {
                                         child: Text(
                                           "${index + i}",
                                           style: TextStyle(
+                                            fontFamily: 'PublicaPlay',
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
                                             color: selected
@@ -159,6 +161,7 @@ class Berth extends StatelessWidget {
                                 Text textWidget = const Text(
                                     ""); // Text Widget for denoting berth levels
                                 TextStyle textStyle = TextStyle(
+                                  fontFamily: 'PublicaPlay',
                                   // This textstyle is for berth levels..LOWER, MIDDLE, UPPER etc.
                                   fontSize: 7,
                                   fontWeight: FontWeight.bold,
@@ -199,6 +202,7 @@ class Berth extends StatelessWidget {
                                         child: Text(
                                           "${index + (isBig ? 3 : 1) + i}",
                                           style: TextStyle(
+                                            fontFamily: 'PublicaPlay',
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
                                             color: selected
@@ -348,6 +352,8 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             minLines: null,
             expands: true,
             style: TextStyle(
+              fontFamily: 'PublicaPlay',
+              letterSpacing: 2,
               color: topTextColor,
               fontSize: 14,
               fontWeight: FontWeight.bold,
@@ -357,6 +363,8 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
               contentPadding: const EdgeInsets.only(left: 10),
               hintText: "Enter Seat Number...",
               hintStyle: TextStyle(
+                letterSpacing: 2,
+                fontFamily: 'PublicaPlay',
                 color: topTextColor,
                 fontWeight: FontWeight.bold,
               ),
@@ -406,6 +414,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                 child: Text(
                   "Find",
                   style: TextStyle(
+                    fontFamily: 'PublicaPlay',
                     color: backgroundColor,
                   ),
                 ),
