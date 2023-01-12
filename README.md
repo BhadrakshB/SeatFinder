@@ -34,6 +34,8 @@ flutter packages get
 flutter run
 ```
 
+5) You can also find the apk in the /build/app/outputs/flutter-apk directory:
+
 # Functionality
  - Users can input a seat number and press the "Find" button.
 The application will then display the position of the seat and indicate the type of berth it is (e.g. upper, middle, lower, side-upper, side-lower).
