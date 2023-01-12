@@ -79,7 +79,7 @@ class Berth extends StatelessWidget {
                                 // Text to denote berth levels
                                 TextStyle textStyle = TextStyle(
                                   // This textstyle is for berth levels..LOWER,
-                                  // MIDDLE, UPPER
+                                  // MIDDLE, UPPER etc.
                                   fontSize: 7,
                                   fontWeight: FontWeight.bold,
                                   color: selected
@@ -159,7 +159,7 @@ class Berth extends StatelessWidget {
                                 Text textWidget = const Text(
                                     ""); // Text Widget for denoting berth levels
                                 TextStyle textStyle = TextStyle(
-                                  // This textstyle is for berth levels..LOWER, MIDDLE, UPPER
+                                  // This textstyle is for berth levels..LOWER, MIDDLE, UPPER etc.
                                   fontSize: 7,
                                   fontWeight: FontWeight.bold,
                                   color: selected

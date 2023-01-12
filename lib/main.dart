@@ -6,6 +6,7 @@ import 'package:seat_finder/Providers/search_bar_provider.dart';
 import 'package:seat_finder/constants.dart';
 
 import 'components/Elements.dart';
+import 'splash_screen_lottie.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const MyHomePage(),
+        home: const LottieSplashScreen(),
       ),
     );
   }
